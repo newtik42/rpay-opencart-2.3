@@ -1,77 +1,24 @@
-<div class="row">
-<div class="buttons">
-    <div class="pull-right">
-        <input type="button" value="<?=$button_confirm;?>" id="button-confirm" class="btn btn-primary" />
-    </div>
-</div>
-</div>
-<div class="row">
-    <div class="col-sm-6">
-        <div id="rozetkapay_pay" style="display: none">
-            <a href=""  class="btn btn-primary"><?=$button_pay;?></a>
-            <br>
-            <img src="">
-        </div>
-    </div>
-    <div class="col-sm-6">
-        <div id="rozetkapay_pay_holding" style="display: none">
-            <a href=""  class="btn btn-primary"><?=$button_pay_holding;?></a>
-            <br>
-            <img src="">
-        </div>
-    </div>
-</div>
-<div rozetkapay_alert_error style="display: none; color: red"></div>
+<?php if($pay){ ?>
+<form method="GET" id="rozetkapay" action="<?=$pay_href;?>" accept-charset="utf-8">
+    <?php if($pay_qrcode){ ?>
+    <img rpay_qrcode src="" style="display: none" height="150">    
+    <input type="submit" value="<?=$button_confirm;?>"/>
+    <?php }else{ ?>
+    <input type="submit" value="<?=$button_confirm;?>" id="button-confirm" class="btn btn-primary button" />
+    <?php } ?>
+</form>
 <script>
-    $('[rozetkapay_alert_error]').html('').hide()
-    $('#button-confirm').bind('click', function () {
-        $('[rozetkapay_alert_error]').hide()
-        let but = $(this)
-        $('#button-confirm').parent().find('.alert').remove()
-        $.ajax({
-            url: 'index.php?route=<?=$path;?>/createPay',
-            dataType: 'json'
-        }).done(function (json) {
-            
-            
-            
-            if(json.pay && !json.qrcode && !json.pay_holding){
-                location = json.pay_href
-            }
-
-            if (json.pay) {
-
-                $('#rozetkapay_pay a').attr('href', json.pay_href)
-
-                if (json.qrcode) {
-                    $('#rozetkapay_pay img').attr('src', json.pay_qrcode)
-                }
-                $('#rozetkapay_pay').show()
-
-            }else{
-                
-            }
-
-            if (json.pay_holding) {
-
-                $('#rozetkapay_pay_holding a').attr('href', json.pay_holding_href)
-
-                if (json.qrcode) {
-                    $('#rozetkapay_pay_holding img').attr('src', json.pay_holding_qrcode)
-                }
-                $('#rozetkapay_pay_holding').show()
-
-            }
-            
-            if(json.pay || json.pay_holding){
-                $('#button-confirm').hide()
-            }
-            
-            if(json.alert.length > 0){
-                $('[rozetkapay_alert_error]').html(json['alert'].join('<br>')).show()
-                
-            }
-        });
-        return false;
-    });
+    <?php if($pay_qrcode){ ?>
+    $.ajax({
+        method:'POST',
+        url: 'index.php?route=<?=$path;?>/genQrCode',
+        data:{ 'text':'<?=$pay_href;?>' }
+    }).done(function (image) {
+        $('[rpay_qrcode]').attr('src',image).show()
+        $('svg[rpay]').hide()
+    })    
+    <?php } ?>
 </script>
+<?php }else{ ?>
+<div rozetkapay_alert_error style="color: red"><?=$error;?></div>
+<?php } ?>

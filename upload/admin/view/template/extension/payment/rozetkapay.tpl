@@ -121,6 +121,31 @@
                                     </select>
                                 </div>
                             </div>
+                            
+                            <div class="form-group">
+                                    
+                                <label class="col-sm-2 control-label"><?=$text_currency_detect;?></label>
+                                <div class="col-sm-4">
+                                    <select name="payment_rozetkapay_currency_detect" class="form-control">                                        
+                                        <?php foreach ($currencys as $currency) { ?>
+                                            <option value="<?=$currency.id;?>"
+                                            <?=$payment_rozetkapay_currency_detect == $currency['id'] ? 
+                                                'selected="selected"':'';?>><?=$currency['name'];?></option>     
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                                    
+                                <label class="col-sm-2 control-label"><?=$text_language_detect;?></label>
+                                <div class="col-sm-4">
+                                    <select name="payment_rozetkapay_language_detect" class="form-control">
+                                        <?php foreach ($rpay_languages as $language) { ?>
+                                            <option value="<?=$language.id;?>"
+                                            <?=$payment_rozetkapay_language_detect == $language['id'] ? 
+                                                'selected="selected"':'';?>><?=$language['name'];?></option>                                            
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
 
                             <div class="form-group">
                                 <label class="col-sm-2 control-label" for="input-status"><?php echo $entry_status; ?></label>
